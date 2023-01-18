@@ -1,8 +1,4 @@
-==========================================================================
-
--->DevHilario
-
-===========================================================================
+# GERENCIADOR DE LIVROS
 
 Neste repertorio feito no Python introduz um organizador de livros para guardar em algum local, nele contemos:
 
