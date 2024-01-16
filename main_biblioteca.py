@@ -9,14 +9,21 @@ class Library(Tk):
     def __init__(self):
         super().__init__()
 
+
+
+        self.color_button_initial = '#629d6c'
+        self.color_button_screens = '#00FFFF'
+        self.background_space = '#BCBCBC'
+
+
         self.Banco_De_Dados = sqlite3.connect('Gerenciamento_Da_Biblioteca.db')
         self.Cursor = self.Banco_De_Dados.cursor()
         try:
             self.Cursor.execute('CREATE TABLE Biblioteca (Id INTEGER PRIMARY KEY AUTOINCREMENT'
-                                                                                    ',Nome VARCHAR(30),'
-                                                                                    'Autor VARCHAR(25),'
-                                                                                    'Editor_a VARCHAR(25),'
-                                                                                    'Fisico_PDF text)')
+                                ',Nome VARCHAR(30),'
+                                'Autor VARCHAR(25),'
+                                'Editor_a VARCHAR(25),' 
+                                'Fisico_PDF text)')
 
         except:
             pass
@@ -24,80 +31,93 @@ class Library(Tk):
         self.title('Gereciamento de Livros')
         self.resizable(False, False)
 
-        background_button = '#629d6c'
+        self['bg'] = self.background_space
+        self.geometry("+350+150")
 
-        Label(self, text='Gerenciador de Livros', font=('Comic Sans MS', 50, 'bold')).grid(row=0, column=0,
+        Label(self, text='Gerenciador de Livros', font=('Comic Sans MS', 50, 'bold'), bg=self.background_space).grid(row=0, column=0,
                                                                                            sticky='NEWS', padx=30,
                                                                                            pady=40)
 
-        Adicionar_livros = Button(self, text='Adicionar Livro', font=('Verdana', 20), bd=5, relief=RAISED, bg=background_button, command=self.Adicionar_algum_livro)
+        Adicionar_livros = Button(self, text='Adicionar Livro', font=('Verdana', 20), bd=5, relief=RAISED,
+                                  bg=self.color_button_initial, command=self.Adicionar_algum_livro)
         Adicionar_livros.grid(row=1, column=0, sticky='NEWS', padx=7, pady=7)
 
-        Todos_livros = Button(self, text='Todos os Livros', font=('Verdana', 20), bd=5, relief=RAISED, bg=background_button, command=self.Todos_livros_registrados)
+        Todos_livros = Button(self, text='Todos os Livros', font=('Verdana', 20), bd=5, relief=RAISED,
+                              bg=self.color_button_initial, command=self.Todos_livros_registrados)
         Todos_livros.grid(row=2, column=0, sticky='NEWS', padx=7, pady=7)
 
-        Deletar_livros = Button(self, text='Deletar Livro', font=('Verdana', 20), bd=5, relief=RAISED, bg=background_button, command=self.Del_livro)
+        Deletar_livros = Button(self, text='Deletar Livro', font=('Verdana', 20), bd=5, relief=RAISED,
+                                bg=self.color_button_initial, command=self.Del_livro)
         Deletar_livros.grid(row=3, column=0, sticky='NEWS', padx=7, pady=7)
 
-        Sair_livraria = Button(self, text='Sair da Livraria', font=('Verdana', 20), bd=5, relief=RAISED, bg=background_button, command=self.Sair_da_biblioteca)
+        Sair_livraria = Button(self, text='Sair da Livraria', font=('Verdana', 20), bd=5, relief=RAISED,
+                               bg=self.color_button_initial, command=self.Sair_da_biblioteca)
         Sair_livraria.grid(row=4, column=0, sticky='NEWS', padx=7, pady=7)
 
-        self.open_adicionar = False
 
     def Adicionar_algum_livro(self):
         self.withdraw()
-
-        background = '#fff580'
 
         values = {'Livro Físico': '1',
                   'Livro PDF': '2'}
 
         self.Adicionar = Toplevel(self)
         self.Adicionar.resizable(False, False)
+        self.Adicionar.geometry("+350+150")
 
         self.String = StringVar(self.Adicionar)
 
-        Label(self.Adicionar, text='   Adicionar Livros   ', font=('Comic Sans MS', 50, 'bold')).grid(row=0, column=0, sticky='NEWS', padx=30, pady=40, columnspan=2)
+        Label(self.Adicionar, text='   Adicionar Livros   ', font=('Comic Sans MS', 50, 'bold')).grid(row=0, column=0,
+                                                                                                      sticky='NEWS',
+                                                                                                      padx=30, pady=40,
+                                                                                                      columnspan=2)
 
-        Label(self.Adicionar, text='Nome do Livro: ', font=('Verdana', 15)).grid(row=1, column=0, sticky='NES', padx=7, pady=7)
+        Label(self.Adicionar, text='Nome do Livro: ', font=('Verdana', 15)).grid(row=1, column=0, sticky='NES', padx=7,
+                                                                                 pady=7)
 
         self.Nome_livro_entry = Entry(self.Adicionar, font=('Verdana', 15))
         self.Nome_livro_entry.grid(row=1, column=1, sticky='NEWS', padx=7, pady=7)
 
-        Label(self.Adicionar, text='Autor do Livro: ', font=('Verdana', 15)).grid(row=2, column=0, sticky='NES', padx=7, pady=7)
+        Label(self.Adicionar, text='Autor(a) do Livro: ', font=('Verdana', 15)).grid(row=2, column=0, sticky='NES', padx=7,
+                                                                                  pady=7)
 
         self.Autor_livro_entry = Entry(self.Adicionar, font=('Verdana', 15))
         self.Autor_livro_entry.grid(row=2, column=1, sticky='NEWS', padx=7, pady=7)
 
-        Label(self.Adicionar, text='Editor(a) do Livro: ', font=('Verdana', 15)).grid(row=3, column=0, sticky='NES', padx=7, pady=7)
+        Label(self.Adicionar, text='Editor(a) do Livro: ', font=('Verdana', 15)).grid(row=3, column=0, sticky='NES',
+                                                                                      padx=7, pady=7)
 
         self.Editor_livro_entry = Entry(self.Adicionar, font=('Verdana', 15))
         self.Editor_livro_entry.grid(row=3, column=1, sticky='NEWS', padx=7, pady=7)
 
         for (text, value) in values.items():
-            self.Tipo_livro = Radiobutton(self.Adicionar, text=text, variable=self.String, value=value, indicator=0, font=('Verdana', 15), bd=5, relief=RAISED)
+            self.Tipo_livro = Radiobutton(self.Adicionar, text=text, variable=self.String, value=value, indicator=0,
+                                          font=('Verdana', 15), bd=5, relief=RAISED)
             self.Tipo_livro.grid(row=4, column=int(value) - 1, sticky='NEWS', padx=7, pady=7)
 
-        Salvar_Button = Button(self.Adicionar, text='Salvar Dados do Livro', font=('Arial Black', 20), bd=5, relief=RAISED, bg=background, command=self.Salvar_Livro)
+        Salvar_Button = Button(self.Adicionar, text='Salvar Dados do Livro', font=('Arial Black', 20), bd=5,
+                               relief=RAISED, bg=self.color_button_screens, command=self.Salvar_Livro)
         Salvar_Button.grid(row=5, column=0, columnspan=2, sticky='NEWS', padx=10, pady=10)
 
-        Voltar_Button = Button(self.Adicionar, text='Voltar Para Página Inicial', font=('Arial Black', 20), bd=5, relief=RAISED, bg=background, command=self.Voltar_Inicial)
+        Voltar_Button = Button(self.Adicionar, text='Voltar Para Página Inicial', font=('Arial Black', 20), bd=5,
+                               relief=RAISED, bg=self.color_button_screens, command=self.Voltar_Inicial)
         Voltar_Button.grid(row=6, column=0, columnspan=2, sticky='NEWS', padx=10, pady=10)
 
     def Todos_livros_registrados(self):
         self.withdraw()
 
-        background = '#fff580'
-
         Tabela = []
 
         self.Registros = Toplevel(self)
         self.Registros.resizable(False, False)
+        self.Registros.geometry("+350+150")
 
-        Voltar_Button = Button(self.Registros, text='Voltar Para Página Inicial', font=('Arial Black', 20), bd=5, relief=RAISED, bg=background, command=self.Voltar_Inicial)
+        Voltar_Button = Button(self.Registros, text='Voltar Para Página Inicial', font=('Arial Black', 20), bd=5,
+                               relief=RAISED, bg=self.color_button_screens, command=self.Voltar_Inicial)
         Voltar_Button.grid(row=0, column=0, columnspan=5, sticky='NEWS', padx=10, pady=10)
 
-        list = self.Cursor.execute('SELECT * FROM Biblioteca')
+        list = self.Cursor.execute('SELECT * FROM Biblioteca  ORDER BY Nome ASC;')
+
 
         nomes_org = ['Livro', 'Autor(a)', 'Editor(a)', 'Formato']
 
@@ -106,10 +126,6 @@ class Library(Tk):
 
         style = ttk.Style()
         style.theme_use('alt')
-        style.configure('Treeview', background='white', foreground='block', rowheight=25, fieldbackground='white',
-                        font=('None', 15))
-
-        style.map('Treeview', background=[('selected', 'green')])
 
         tree = ttk.Treeview(self.Registros, columns=nomes_org, show='headings')
 
@@ -120,26 +136,29 @@ class Library(Tk):
         for table in Tabela:
             tree.insert('', END, values=table)
 
-        tree.grid(row=1, column=0, columnspan=5)
+        tree.grid(row=1, column=0)
 
-        Scroll = ttk.Scrollbar(self.Registros, orient=VERTICAL, command=tree.yview)
-        tree.configure(yscroll=Scroll.set)
-        Scroll.grid(row=1, column=5, sticky='NS')
+        Scroll_v = ttk.Scrollbar(self.Registros, orient=VERTICAL, command=tree.yview)
+        tree.configure(yscrollcommand=Scroll_v.set)
+        Scroll_v.grid(row=1, column=2, sticky='NS')
+
 
     def Del_livro(self):
         self.withdraw()
 
-        background = '#fff580'
 
         Tabela_mostrar = []
 
         self.Del = Toplevel(self)
         self.Del.resizable(False, False)
+        self.Del.geometry("+350+150")
 
-        Voltar_Button = Button(self.Del, text='Voltar Para Página Inicial', font=('Arial Black', 20), bd=5,relief=RAISED, bg=background, command=self.Voltar_Inicial)
+        Voltar_Button = Button(self.Del, text='Voltar Para Página Inicial', font=('Arial Black', 20), bd=5,
+                               relief=RAISED, bg=self.color_button_screens, command=self.Voltar_Inicial)
         Voltar_Button.grid(row=0, column=0, columnspan=5, sticky='NEWS', padx=10, pady=10)
 
-        list = self.Cursor.execute('SELECT * FROM Biblioteca')
+        list = self.Cursor.execute('SELECT * FROM Biblioteca ORDER BY Nome ASC;')
+
 
         nomes_org = ['Livro', 'Autor(a)', 'Editor(a)', 'Formato']
 
@@ -148,7 +167,6 @@ class Library(Tk):
 
         style = ttk.Style()
         style.theme_use('alt')
-        style.configure('Treeview', background='white', foreground='block', rowheight=25, fieldbackground='white',font=('None', 15))
 
         style.map('Treeview', background=[('selected', 'green')])
 
@@ -194,7 +212,9 @@ class Library(Tk):
             self.Editor_livro_entry.delete('0', 'end')
             self.String.set(0)
 
-            self.Cursor.execute(f'INSERT INTO Biblioteca (Nome, Autor, Editor_a, Fisico_PDF) VALUES ("{Livro}", "{Autor}", "{Editor}", "{Tipo}")')
+            self.Cursor.execute(
+                f'INSERT INTO Biblioteca (Nome, Autor, Editor_a, Fisico_PDF) VALUES ("{Livro}", "{Autor}", "{Editor}", "{Tipo}")')
+
             self.Banco_De_Dados.commit()
 
     def Jogar_livro_ao_limbo(self, event):
@@ -209,11 +229,9 @@ class Library(Tk):
                 G = self.tree.item(selected_item)
                 values = list(G.values())
 
-
-
                 for l in lists:
-                    if l[1] == str(values[2][0]) and l[2] == str(values[2][1]) and l[3] == str(values[2][2]) and l[4] == str(values[2][3]):
-
+                    if l[1] == str(values[2][0]) and l[2] == str(values[2][1]) and l[3] == str(values[2][2]) and l[
+                        4] == str(values[2][3]):
                         id_excluir = l[0]
 
                         self.Cursor.execute(f'DELETE from Biblioteca WHERE id = {id_excluir}')
