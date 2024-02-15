@@ -9,8 +9,6 @@ class Library(Tk):
     def __init__(self):
         super().__init__()
 
-
-
         self.color_button_initial = '#629d6c'
         self.color_button_screens = '#00FFFF'
         self.background_space = '#BCBCBC'
@@ -260,7 +258,6 @@ class Library(Tk):
 
         except:
             pass
-
 
 if __name__ == '__main__':
     Library().mainloop()
